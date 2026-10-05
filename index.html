@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Замовлення їжі</title>
+  <style>
+    /* Темна тема, схожа на ваше портфоліо */
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #1f6feb;
+      --radius: 8px;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 2fr 1fr; /* Меню займає більше місця, кошик - менше */
+      gap: 24px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    /* Стилі для меню */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card h3 {
+      margin: 0 0 10px 0;
+      color: var(--text);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Стилі для кошика */
+    .cart {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 40px;
+    }
+
+    .cart h2 {
+      margin-top: 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .cart-items {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+      min-height: 50px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .remove-btn {
+      background-color: transparent;
+      color: #ff7b72;
+      padding: 5px;
+      font-size: 1.2rem;
+      margin-left: 10px;
+    }
+
+    .remove-btn:hover {
+      background-color: rgba(255, 123, 114, 0.1);
+    }
+
+    .total-section {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background-color: #238636; /* Зелена кнопка для замовлення */
+    }
+
+    .checkout-btn:hover {
+      background-color: #2ea043;
+    }
+
+    /* Адаптивність для телефонів */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr; /* Кошик падає вниз на телефонах */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Ліва частина: Меню -->
+    <div>
+      <h2 style="margin-top: 0;">Меню Ресторану</h2>
+      <div class="menu-grid">
+        
+        <div class="card">
+          <h3>🍕 Піца "Маргарита"</h3>
+          <p>Класична піца з томатним соусом та моцарелою.</p>
+          <div class="price">250 ₴</div>
+          <button onclick="addToCart('Піца Маргарита', 250)">Додати в кошик</button>
+        </div>
+
+        <div class="card">
+          <h3>🍔 Бургер "Техас"</h3>
+          <p>Яловича котлета, бекон, сир чеддер, соус барбекю.</p>
+          <div class="price">320 ₴</div>
+          <button onclick="addToCart('Бургер Техас', 320)">Додати в кошик</button>
+        </div>
+
+        <div class="card">
+          <h3>🥗 Салат "Цезар"</h3>
+          <p>Куряче філе, пармезан, сухарики, перепелині яйця.</p>
+          <div class="price">210 ₴</div>
+          <button onclick="addToCart('Салат Цезар', 210)">Додати в кошик</button>
+        </div>
+
+        <div class="card">
+          <h3>🥤 Кока-Кола</h3>
+          <p>Охолоджений напій 0.5 л.</p>
+          <div class="price">60 ₴</div>
+          <button onclick="addToCart('Кока-Кола', 60)">Додати в кошик</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Права частина: Кошик -->
+    <div class="cart">
+      <h2>Ваш Кошик 🛒</h2>
+      <ul class="cart-items" id="cart-list">
+        <li style="color: var(--text-muted); text-align: center; padding: 10px 0;" id="empty-msg">Кошик порожній</li>
+      </ul>
+      
+      <div class="total-section">
+        <span>Разом:</span>
+        <span><span id="total-price">0</span> ₴</span>
+      </div>
+      
+      <button class="checkout-btn" onclick="checkout()">Оформити замовлення</button>
+    </div>
+
+  </div>
+
+  <!-- Скрипт логіки кошика -->
+  <script>
+    let total = 0; // Загальна сума
+    const cartList = document.getElementById('cart-list');
+    const totalPriceEl = document.getElementById('total-price');
+    const emptyMsg = document.getElementById('empty-msg');
+
+    function addToCart(itemName, itemPrice) {
+      // Ховаємо напис "Кошик порожній", якщо він є
+      if (emptyMsg) {
+        emptyMsg.style.display = 'none';
+      }
+
+      // Оновлюємо загальну суму
+      total += itemPrice;
+      totalPriceEl.textContent = total;
+
+      // Створюємо новий елемент у списку кошика
+      const li = document.createElement('li');
+      li.className = 'cart-item';
+      
+      // Назва та ціна товару
+      const itemInfo = document.createElement('span');
+      itemInfo.textContent = `${itemName} - ${itemPrice} ₴`;
+
+      // Кнопка видалення (хрестик)
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-btn';
+      removeBtn.innerHTML = '✖';
+      
+      // Логіка видалення товару з кошика
+      removeBtn.onclick = function() {
+        total -= itemPrice; // Віднімаємо ціну
+        totalPriceEl.textContent = total; // Оновлюємо текст суми
+        li.remove(); // Видаляємо рядок
+        
+        // Якщо кошик став порожнім, повертаємо напис
+        if (cartList.children.length === 1) { // 1, бо emptyMsg все ще в DOM, просто прихований
+          emptyMsg.style.display = 'block';
+        }
+      };
+
+      // Додаємо текст і кнопку в рядок, а рядок — у кошик
+      li.appendChild(itemInfo);
+      li.appendChild(removeBtn);
+      cartList.appendChild(li);
+    }
+
+    function checkout() {
+      if (total === 0) {
+        alert("Ваш кошик порожній. Додайте щось перед замовленням!");
+      } else {
+        alert(`Дякуємо за замовлення! До сплати: ${total} ₴.\nМенеджер скоро з вами зв'яжеться.`);
+        
+        // Очищаємо кошик після замовлення
+        const items = document.querySelectorAll('.cart-item');
+        items.forEach(item => item.remove());
+        
+        total = 0;
+        totalPriceEl.textContent = total;
+        emptyMsg.style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>
